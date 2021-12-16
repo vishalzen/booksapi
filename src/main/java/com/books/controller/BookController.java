@@ -1,6 +1,7 @@
-package com.books;
+package com.books.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.books.service.BookService;
+import com.books.model.Book;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +30,7 @@ public class BookController {
     }
 
     @GetMapping("/external-books")
-    public List<Book> getExternalBook(@RequestParam String name) throws JsonProcessingException {
+    public List<Book> getExternalBook(@RequestParam String name) {
         String uri = "https://www.anapioficeandfire.com/api/books/?name=" + name;
         HttpHeaders headers = new HttpHeaders();
         headers.add("user-agent", "Application");

@@ -1,4 +1,4 @@
-package com.books;
+package com.books.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

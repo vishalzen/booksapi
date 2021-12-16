@@ -1,4 +1,4 @@
-package com.books;
+package com.books.converter;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;

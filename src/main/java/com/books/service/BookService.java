@@ -1,5 +1,8 @@
-package com.books;
+package com.books.service;
 
+import com.books.model.Book;
+import com.books.model.ExternalBook;
+import com.books.repository.BookRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

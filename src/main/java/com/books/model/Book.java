@@ -1,7 +1,8 @@
-package com.books;
+package com.books.model;
+
+import com.books.converter.StringListConverter;
 
 import javax.persistence.Convert;
-import javax.persistence.Converter;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.util.List;
