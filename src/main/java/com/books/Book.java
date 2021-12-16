@@ -31,6 +31,9 @@ public class Book {
         this.release_date = release_date;
     }
 
+    public Book(Object o) {
+    }
+
     public String getName() {
         return name;
     }
