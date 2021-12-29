@@ -1,13 +1,18 @@
 package com.books.controller;
 
-import com.books.service.BookService;
 import com.books.model.Book;
+import com.books.model.ExtendedResponsePOJO;
+import com.books.model.ResponsePOJO;
+import com.books.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 public class BookController {
@@ -17,29 +22,37 @@ public class BookController {
 
     @GetMapping("/")
     public String hello(){
-        return "Hello World";
+        return "Home of Books api";
     }
 
     @GetMapping("/books")
-    public List<Book>  getBooks(){
-        return bookService.getBooks();
+    public ResponseEntity<ResponsePOJO> getBooks(){
+        List<Book> books = bookService.getBooks();
+        return new ResponseEntity<>(ResponsePOJO.builder()
+                .status_code(HttpStatus.OK.value())
+                .status("success")
+                .data(new ArrayList<Object>(books))
+                .build(),HttpStatus.OK
+        );
     }
+
     @PostMapping("/books")
-    public void addBook(@RequestBody Book book){
-        bookService.addBook(book);
+    public ResponseEntity<ResponsePOJO> addBook(@RequestBody Book book){
+        List<Object> objects = new ArrayList<>();
+        objects.add(bookService.addBook(book));
+        return new ResponseEntity<>(ResponsePOJO
+                .builder()
+                .status_code(HttpStatus.CREATED.value())
+                .status("success")
+                .data(objects)
+                .build(),HttpStatus.OK
+        );
     }
 
-    @GetMapping("/external-books")
-    public List<Book> getExternalBook(@RequestParam String name) {
-        String uri = "https://www.anapioficeandfire.com/api/books/?name=" + name;
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("user-agent", "Application");
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<Object[]> responseEntity = restTemplate.exchange(uri,HttpMethod.GET,entity,Object[].class);
-
-        Object[] objects = responseEntity.getBody();
-
-        return bookService.getExternalBooks(objects);
-    }
+//    @PatchMapping("/books/{id}")
+//    public ResponseEntity<ExtendedResponsePOJO> patchBook(
+//            @RequestBody Map<String, Object> updates,
+//            @PathVariable Integer id) {
+//        bookService.patchBook(updates,id);
+//    }
 }
