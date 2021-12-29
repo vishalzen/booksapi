@@ -5,7 +5,7 @@ import java.util.List;
 
 @Data
 @Builder
-public class ExternalBook {
+public class BookDto {
     private String name;
     private String isbn;
     private List<String> authors;

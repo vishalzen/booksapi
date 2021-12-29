@@ -1,6 +1,5 @@
 package com.books.controller;
 
-import com.books.model.ExternalBook;
 import com.books.model.IceAndFireResponse;
 import com.books.model.ResponsePOJO;
 import com.books.service.BookService;
@@ -23,7 +22,7 @@ public class ExternalBookController {
     @Autowired
     private BookService bookService;
 
-    @GetMapping("/external-books")
+    @GetMapping("api/external-books")
     public ResponseEntity<ResponsePOJO> getExternalBook(@RequestParam String name) {
         String uri = "https://www.anapioficeandfire.com/api/books/?name=" + name;
         HttpHeaders headers = new HttpHeaders();

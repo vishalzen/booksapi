@@ -1,13 +1,16 @@
 package com.books.model;
 
-import lombok.Data;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
-import java.util.List;
-
-public class ExtendedResponsePOJO extends ResponsePOJO {
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@Builder
+public class ExtendedResponsePOJO{
+    Integer status_code;
+    String status;
     String message;
-
-    ExtendedResponsePOJO(Integer status_code, String status, List<Object> data) {
-        super(status_code, status, data);
-    }
+    Object data;
 }

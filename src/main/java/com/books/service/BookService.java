@@ -1,15 +1,17 @@
 package com.books.service;
 
 import com.books.model.Book;
-import com.books.model.ExternalBook;
+import com.books.model.BookDto;
 import com.books.model.IceAndFireResponse;
 import com.books.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,9 +29,9 @@ public class BookService {
         return bookRepository.save(book);
     }
 
-    public List<ExternalBook> getExternalBooks(List<IceAndFireResponse> iceAndFireResponses){
+    public List<BookDto> getExternalBooks(List<IceAndFireResponse> iceAndFireResponses){
         return iceAndFireResponses.stream()
-                .map(iceAndFireResponse -> ExternalBook.builder()
+                .map(iceAndFireResponse -> BookDto.builder()
                         .name(iceAndFireResponse.getName())
                         .isbn(iceAndFireResponse.getIsbn())
                         .authors(iceAndFireResponse.getAuthors())
@@ -41,7 +43,53 @@ public class BookService {
                 .collect(Collectors.toList());
     }
 
-//    public Book patchBook(Map<String,Object> updates, Integer id){
-//        bookRepository.
-//    }
+    public Book getBookById(Integer id){
+        Optional<Book> book =  bookRepository.findById(id);
+        return book.orElseGet(() -> Book.builder().build());
+    }
+
+    public Book deleteBookById(Integer id){
+        Book book = bookRepository.findById(id).orElse(null);
+        if(Objects.nonNull(book)) bookRepository.deleteById(id);
+        return book;
+    }
+
+    public Book patchBook(BookDto bookDto, Integer id){
+        Book book = bookRepository.findById(id).orElse(null);
+        if(Objects.nonNull(book)){
+            boolean needUpdate = false;
+            if(StringUtils.hasLength(bookDto.getName())){
+                book.setName(bookDto.getName());
+                needUpdate = true;
+            }
+            if(StringUtils.hasLength(bookDto.getIsbn())){
+                book.setIsbn(bookDto.getIsbn());
+                needUpdate = true;
+            }
+            if(Objects.nonNull(bookDto.getAuthors())){
+                book.setAuthors(bookDto.getAuthors());
+                needUpdate = true;
+            }
+            if(Objects.nonNull(bookDto.getNumber_of_pages())){
+                book.setNumber_of_pages(bookDto.getNumber_of_pages());
+                needUpdate = true;
+            }
+            if(StringUtils.hasLength(bookDto.getPublisher())){
+                book.setPublisher(bookDto.getPublisher());
+                needUpdate = true;
+            }
+            if(StringUtils.hasLength(bookDto.getCountry())){
+                book.setCountry(bookDto.getCountry());
+                needUpdate = true;
+            }
+            if(StringUtils.hasLength(bookDto.getRelease_date())){
+                book.setRelease_date(bookDto.getRelease_date());
+                needUpdate = true;
+            }
+            if(needUpdate){
+                return bookRepository.save(book);
+            }
+        }
+        return book;
+    }
 }

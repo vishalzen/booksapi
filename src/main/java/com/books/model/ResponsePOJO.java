@@ -1,13 +1,16 @@
 package com.books.model;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
-import java.util.List;
 
-@Data
-@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@SuperBuilder
 public class ResponsePOJO {
     Integer status_code;
     String status;
-    List<Object> data;
+    Object data;
 }
